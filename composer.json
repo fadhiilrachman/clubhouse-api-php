@@ -1,0 +1,35 @@
+{
+    "name": "fadhiilrachman/clubhouse-api",
+    "description": "Clubhouse Private API",
+    "type": "library",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Fadhiil Rachman",
+            "email": "fadhiilrachman@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^5.6.0 || ^7.0"
+    },
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "path",
+            "url": ".",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "FadhiilRachman\\Clubhouse\\": "src" 
+        } 
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FadhiilRachman\\Clubhouse\\": "src" 
+        } 
+    }
+}
