@@ -18,7 +18,7 @@ try {
     print_r($me);
 
 } catch(ClubhouseException $e) {
-	// if error, display the message and code
-	echo 'Error message: ' . $e->getMessage() . "\n";
-	echo 'Error code: ' . $e->getCode();
+    // if error, display the message and code
+    echo 'Error message: ' . $e->getMessage() . "\n";
+    echo 'Error code: ' . $e->getCode();
 }
