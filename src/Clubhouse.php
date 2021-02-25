@@ -3,7 +3,7 @@
 /**
 * Clubhouse Private API
 * @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman>
-* @version 0.0.2
+* @version 0.0.3    
 * @license https://github.com/fadhiilrachman/clubhouse-api-php/blob/master/LICENSE The BSD-3-Clause License
 */
 
@@ -68,7 +68,7 @@ class Clubhouse extends Requests
         return $request;
     }
 
-    public function follow($user_id, $user_ids=null, $source=4, $source_topic_id=null) {
+    public function follow($user_id, $user_ids=null) {
         if(!$this->isLoggedIn) {
             throw new ClubhouseException('not logged in', 400);
             return ;
@@ -76,8 +76,8 @@ class Clubhouse extends Requests
         $post=[
             'user_id' => $user_id,
             'user_ids' => $user_ids,
-            'source' => $source,
-            'source_topic_id' => $source_topic_id,
+            'source' => 4,
+            'source_topic_id' => null,
         ];
         $request = $this->post('/follow', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
@@ -98,6 +98,70 @@ class Clubhouse extends Requests
         $request = $this->post('/unfollow', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('unfollow failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function followClub($club_id) {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $post=[
+            'club_id' => $club_id,
+        ];
+        $request = $this->post('/follow_club', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('follow club failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function unfollowClub($club_id) {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $post=[
+            'club_id' => $club_id,
+        ];
+        $request = $this->post('/unfollow_club', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('unfollow club failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function block($user_id) {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $post=[
+            'user_id' => $user_id,
+        ];
+        $request = $this->post('/block', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('block failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function unblock($user_id) {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $post=[
+            'user_id' => $user_id,
+        ];
+        $request = $this->post('/unblock', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('unblock failed', 500);
             return ;
         }
         return $request;
@@ -137,7 +201,7 @@ class Clubhouse extends Requests
         return $request;
     }
 
-    public function getOnlineFriends($user_id) {
+    public function getOnlineFriends() {
         if(!$this->isLoggedIn) {
             throw new ClubhouseException('not logged in', 400);
             return ;
@@ -161,103 +225,6 @@ class Clubhouse extends Requests
         $request = $this->post('/get_profile', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('get profile failed', 500);
-            return ;
-        }
-        return $request;
-    }
-
-    public function getEvents($is_filtered=true, $page_size=25, $page=1) {
-        if(!$this->isLoggedIn) {
-            throw new ClubhouseException('not logged in', 400);
-            return ;
-        }
-        $param=[
-            'channel' => $channel,
-            'channel_id' => null
-        ];
-        $request = $this->get('/get_events', $param);
-        if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException('get events failed', 500);
-            return ;
-        }
-        return $request;
-    }
-
-    public function getChannel($channel) {
-        if(!$this->isLoggedIn) {
-            throw new ClubhouseException('not logged in', 400);
-            return ;
-        }
-        $post=[
-            'channel' => $channel,
-            'channel_id' => null
-        ];
-        $request = $this->post('/get_channel', $post);
-        if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException('get channel failed', 500);
-            return ;
-        }
-        return $request;
-    }
-
-    public function getChannels() {
-        if(!$this->isLoggedIn) {
-            throw new ClubhouseException('not logged in', 400);
-            return ;
-        }
-        $request = $this->get('/get_channels');
-        if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException('get channels failed', 500);
-            return ;
-        }
-        return $request;
-    }
-
-    public function getAllTopics() {
-        if(!$this->isLoggedIn) {
-            throw new ClubhouseException('not logged in', 400);
-            return ;
-        }
-        $request = $this->get('/get_all_topics');
-        if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException('get all topics failed', 500);
-            return ;
-        }
-        return $request;
-    }
-
-    public function getClub($club_id, $source_topic_id=null) {
-        if(!$this->isLoggedIn) {
-            throw new ClubhouseException('not logged in', 400);
-            return ;
-        }
-        $post=[
-            'club_id' => $club_id,
-            'source_topic_id' => $source_topic_id
-        ];
-        $request = $this->post('/get_club', $post);
-        if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException('get club failed', 500);
-            return ;
-        }
-        return $request;
-    }
-
-    public function getClubMembers($club_id, $return_followers=false, $return_members=true, $page_size=50, $page=1) {
-        if(!$this->isLoggedIn) {
-            throw new ClubhouseException('not logged in', 400);
-            return ;
-        }
-        $param=[
-            'club_id' => $club_id,
-            'return_followers' => $return_followers,
-            'return_members' => $return_members,
-            'page_size' => $page_size,
-            'page' => $page
-        ];
-        $request = $this->get('/get_club_members', $param);
-        if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException('get club members failed', 500);
             return ;
         }
         return $request;
@@ -313,6 +280,103 @@ class Clubhouse extends Requests
         $request = $this->post('/search_users', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('search users failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function getEvents($is_filtered=true, $page_size=25, $page=1) {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $param=[
+            'channel' => $channel,
+            'channel_id' => null
+        ];
+        $request = $this->get('/get_events', $param);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get events failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function getAllTopics() {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $request = $this->get('/get_all_topics');
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get all topics failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function getClub($club_id) {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $post=[
+            'club_id' => $club_id,
+            'source_topic_id' => null
+        ];
+        $request = $this->post('/get_club', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get club failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function getClubMembers($club_id, $return_followers=false, $return_members=true, $page_size=50, $page=1) {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $param=[
+            'club_id' => $club_id,
+            'return_followers' => $return_followers,
+            'return_members' => $return_members,
+            'page_size' => $page_size,
+            'page' => $page
+        ];
+        $request = $this->get('/get_club_members', $param);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get club members failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function getChannel($channel) {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $post=[
+            'channel' => $channel,
+            'channel_id' => null
+        ];
+        $request = $this->post('/get_channel', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get channel failed', 500);
+            return ;
+        }
+        return $request;
+    }
+
+    public function getChannels() {
+        if(!$this->isLoggedIn) {
+            throw new ClubhouseException('not logged in', 400);
+            return ;
+        }
+        $request = $this->get('/get_channels');
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get channels failed', 500);
             return ;
         }
         return $request;

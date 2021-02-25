@@ -1,6 +1,6 @@
 <?php
 
-// This is an example for get me
+// This is an example login with auth token
 // use at your own risk!
 
 require_once 'clubhouse-api/vendor/autoload.php';
