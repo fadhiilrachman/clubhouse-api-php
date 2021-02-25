@@ -3,7 +3,7 @@
 /**
 * Clubhouse Private API
 * @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman>
-* @version 0.0.1
+* @version 0.0.2
 * @license https://github.com/fadhiilrachman/clubhouse-api-php/blob/master/LICENSE The BSD-3-Clause License
 */
 

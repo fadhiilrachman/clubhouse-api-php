@@ -7,9 +7,9 @@ require_once 'clubhouse-api/vendor/autoload.php';
 use \FadhiilRachman\Clubhouse As Clubhouse;
 
 // replace with your phone number and country code
-$phone_number='+6281200000000';
+$phoneNumberOrAuthToken='+6281200000000';
 
-$clubhouse = new Clubhouse\Clubhouse($phone_number);
+$clubhouse = new Clubhouse\Clubhouse($phoneNumberOrAuthToken);
 
 try {
     
