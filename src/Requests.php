@@ -3,7 +3,7 @@
 /**
 * Clubhouse Private API
 * @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman>
-* @version 1.0.0
+* @version 1.1.0
 * @license https://github.com/fadhiilrachman/clubhouse-api-php/blob/master/LICENSE The BSD-3-Clause License
 */
 
@@ -37,6 +37,13 @@ class Requests extends Sessions
         }
     }
 
+    private function validate_token(array $data) {
+        if( is_array($data) && array_key_exists('detail', $data) ) {
+            throw new ClubhouseException($data['detail'], 500);
+        }
+        return $data;
+    }
+
     public function get($endpoint, $param=0) {
         $this->setting_curl();
         curl_setopt_array($this->curl, array(
@@ -46,10 +53,9 @@ class Requests extends Sessions
         $data = curl_exec($this->curl);
         if(!$data) {
             throw new ClubhouseException('cUrl has been crashed', 500);
-            return ;
         }
         curl_close($this->curl);
-        return json_decode($data, true);
+        return $this->validate_token(json_decode($data, true));
     }
 
     public function post($endpoint, $post=[]) {
@@ -65,10 +71,9 @@ class Requests extends Sessions
         $data = curl_exec($this->curl);
         if(!$data) {
             throw new ClubhouseException('cUrl has been crashed', 500);
-            return ;
         }
         curl_close($this->curl);
-        return json_decode($data, true);
+        return $this->validate_token(json_decode($data, true));
     }
 
 }

@@ -3,7 +3,7 @@
 // This is an example login with phone number
 // use at your own risk!
 
-require_once 'clubhouse-api/vendor/autoload.php';
+require_once 'vendor/autoload.php';
 use \FadhiilRachman\Clubhouse As Clubhouse;
 
 // replace with your phone number and country code
@@ -23,11 +23,18 @@ try {
     // complete the verification
     $clubhouse->completePhoneNumberAuth($verification_code);
 
-    // get me and print it
-    $me = $clubhouse->me();
-    print_r($me);
+    // get channels and print it
+    $channels = $clubhouse->getChannels();
+    foreach ($channels['channels'] as $channel) {
+        echo "[ID] " . $channel['channel_id'] . PHP_EOL;
+        echo "[Name] " . $channel['topic'] . PHP_EOL;
+        echo "[URL] " . $channel['url'] . PHP_EOL;
+        echo "[Speakers] " . $channel['num_speakers'] . PHP_EOL;
+        echo "[Speakers] " . $channel['num_speakers'] . PHP_EOL;
+        echo PHP_EOL;
+    }
 
-} catch(ClubhouseException $e) {
+} catch(Clubhouse\ClubhouseException $e) {
     // if error, display the message and code
     echo 'Error message: ' . $e->getMessage() . "\n";
     echo 'Error code: ' . $e->getCode();
