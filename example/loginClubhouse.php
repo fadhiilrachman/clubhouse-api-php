@@ -23,6 +23,11 @@ try {
     // complete the verification
     $clubhouse->completePhoneNumberAuth($verification_code);
 
+    // get user info
+    echo "[PhoneNumber] " . $clubhouse->phone_number . PHP_EOL;
+    echo "[AuthToken] " . $clubhouse->auth_token . PHP_EOL;
+    echo "[UserId] " . $clubhouse->user_id . PHP_EOL;
+
     // get channels and print it
     $channels = $clubhouse->getChannels();
     foreach ($channels['channels'] as $channel) {

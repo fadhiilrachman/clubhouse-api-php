@@ -13,6 +13,9 @@ $clubhouse = new Clubhouse\Clubhouse($phoneNumberOrAuthToken);
 
 try {
 
+    // get user info
+    echo "[AuthToken] " . $clubhouse->auth_token . PHP_EOL;
+
     // get channels and print it
     $channels = $clubhouse->getChannels();
     foreach ($channels['channels'] as $channel) {
