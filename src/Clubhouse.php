@@ -15,8 +15,6 @@ use \FadhiilRachman\Clubhouse\ClubhouseException;
 class Clubhouse extends Requests
 {
 
-    protected $request;
-
     function __construct($phoneNumberOrAuthToken) {
         if( strlen($phoneNumberOrAuthToken) > 0 && strlen($phoneNumberOrAuthToken) <= 16 ) {
             $this->setPhoneNumber($phoneNumberOrAuthToken);
