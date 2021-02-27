@@ -35,7 +35,7 @@ try {
         echo "[Name] " . $channel['topic'] . PHP_EOL;
         echo "[URL] " . $channel['url'] . PHP_EOL;
         echo "[Speakers] " . $channel['num_speakers'] . PHP_EOL;
-        echo "[Speakers] " . $channel['num_speakers'] . PHP_EOL;
+        echo "[All] " . $channel['num_all'] . PHP_EOL;
         echo PHP_EOL;
     }
 
