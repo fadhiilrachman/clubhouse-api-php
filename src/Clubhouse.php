@@ -3,7 +3,7 @@
 /**
 * Clubhouse Private API
 * @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman/>
-* @version 1.2.1
+* @version 1.2.2
 * @license https://github.com/fadhiilrachman/clubhouse-api-php/blob/master/LICENSE The BSD-3-Clause License
 */
 
@@ -245,6 +245,15 @@ class Clubhouse extends Requests
         return $request;
     }
 
+    public function getActionableNotifications() {
+        $this->required_login();
+        $request = $this->get('/get_actionable_notifications');
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get actionable notifications failed', 500);
+        }
+        return $request;
+    }
+
     public function getProfile($user_id) {
         $this->required_login();
         $post=[
@@ -253,6 +262,19 @@ class Clubhouse extends Requests
         $request = $this->post('/get_profile', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('get profile failed', 500);
+        }
+        return $request;
+    }
+
+    public function getNotifications($page_size=20, $page=1) {
+        $this->required_login();
+        $param=[
+            'page_size' => $page_size,
+            'page' => $page
+        ];
+        $request = $this->get('/get_notifications', $param);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get notifications failed', 500);
         }
         return $request;
     }
@@ -281,6 +303,20 @@ class Clubhouse extends Requests
         $request = $this->get('/get_followers', $param);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('get followers failed', 500);
+        }
+        return $request;
+    }
+
+    public function getMutualFollows($user_id, $page_size=50, $page=1) {
+        $this->required_login();
+        $param=[
+            'user_id' => $user_id,
+            'page_size' => $page_size,
+            'page' => $page
+        ];
+        $request = $this->get('/get_mutual_follows', $param);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get mutual follows failed', 500);
         }
         return $request;
     }
@@ -533,6 +569,18 @@ class Clubhouse extends Requests
         return $request;
     }
 
+    public function getSuggestedSpeakers($channel) {
+        $this->required_login();
+        $post=[
+            'channel' => $channel
+        ];
+        $request = $this->post('/get_suggested_speakers', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get suggested speakers failed', 500);
+        }
+        return $request;
+    }
+
     public function audienceReply($channel, $raise_hands=true, $unraise_hands=false) {
         $this->required_login();
         $post=[
@@ -543,6 +591,20 @@ class Clubhouse extends Requests
         $request = $this->post('/audience_reply', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('audience reply failed', 500);
+        }
+        return $request;
+    }
+
+    public function changeHandraiseSettings($channel, $is_enabled=true, $handraise_permission=1) {
+        $this->required_login();
+        $post=[
+            'channel' => $channel,
+            'is_enabled' => $is_enabled,
+            'handraise_permission' => $handraise_permission
+        ];
+        $request = $this->post('/change_handraise_settings', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('change_handraise_settings failed', 500);
         }
         return $request;
     }
