@@ -2,8 +2,8 @@
 
 /**
 * Clubhouse Private API
-* @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman>
-* @version 1.2.0
+* @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman/>
+* @version 1.2.1
 * @license https://github.com/fadhiilrachman/clubhouse-api-php/blob/master/LICENSE The BSD-3-Clause License
 */
 
@@ -19,10 +19,10 @@ class Requests extends Sessions
     public $curl;
     public $headers=[];
     
-    public function setting_curl() {
+    public function setting_curl($headers) {
         $this->curl = curl_init();
-        if(count($this->headers)>0) {
-            foreach ($this->headers as $key=>$value) {
+        if(count($headers)>0) {
+            foreach ($headers as $key=>$value) {
                 $__headers[] = $key . ': ' . $value;
             }
         }
@@ -49,7 +49,7 @@ class Requests extends Sessions
     }
 
     public function get($endpoint, $param=0) {
-        $this->setting_curl();
+        $this->setting_curl($this->headers);
         curl_setopt_array($this->curl, array(
             CURLOPT_URL             => Constants::API_URL . $endpoint . ( $param ? '?'.http_build_query($param) : '')
         ));
@@ -62,9 +62,10 @@ class Requests extends Sessions
     }
 
     public function post($endpoint, $post=[]) {
-        $this->headers['Content-Type'] = 'application/json; charset=utf-8';
-        $this->headers['Accept'] = 'application/json; charset=utf-8';
-        $this->setting_curl();
+        $headers = $this->headers;
+        $headers['Content-Type'] = 'application/json; charset=utf-8';
+        $headers['Accept'] = 'application/json; charset=utf-8';
+        $this->setting_curl($headers);
         curl_setopt_array($this->curl, [
             CURLOPT_URL             => Constants::API_URL . $endpoint,
             CURLOPT_POST            => 1,
@@ -79,7 +80,7 @@ class Requests extends Sessions
     }
 
     public function upload($endpoint, $file_path, $file_name='image.jpg', $file_ext='image/jpeg') {
-        $this->setting_curl();
+        $this->setting_curl($this->headers);
         curl_setopt_array($this->curl, [
             CURLOPT_URL             => Constants::API_URL . $endpoint,
             CURLOPT_POST            => 1,

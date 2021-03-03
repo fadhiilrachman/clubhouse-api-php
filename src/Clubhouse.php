@@ -2,8 +2,8 @@
 
 /**
 * Clubhouse Private API
-* @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman>
-* @version 1.2.0
+* @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman/>
+* @version 1.2.1
 * @license https://github.com/fadhiilrachman/clubhouse-api-php/blob/master/LICENSE The BSD-3-Clause License
 */
 
@@ -213,7 +213,7 @@ class Clubhouse extends Requests
         $this->required_login();;
         $request = $this->upload('/update_photo', $file_path);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException('add email failed', 500);
+            throw new ClubhouseException('update photo failed', 500);
         }
         return $request;
     }
