@@ -41,6 +41,6 @@ try {
 
 } catch(Clubhouse\ClubhouseException $e) {
     // if error, display the message and code
-    echo 'Error message: ' . $e->getMessage() . "\n";
+    echo 'Error message: ' . $e->getMessage() . PHP_EOL;
     echo 'Error code: ' . $e->getCode();
 }

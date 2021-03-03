@@ -13,19 +13,10 @@ class Sessions
 {
     
     public $isLoggedIn=false;
-    public $device_id;
 
     public $phone_number=null;
     public $user_id=null;
     public $auth_token=null;
-
-    function __construct() {
-        $this->device_id = mt_rand(10000,mt_getrandmax());
-    }
-
-    public function logged_in() {
-        $this->isLoggedIn=true;
-    }
 
     public function required_login() {
         if(!$this->isLoggedIn) {
@@ -33,10 +24,17 @@ class Sessions
         }
     }
 
-    public function save(array $data) {
-        $this->logged_in();
+    public function logged_in($data) {
+        if(!$this->isLoggedIn) {
+            $this->isLoggedIn=true;
+        }
         $this->auth_token = $data['auth_token'];
-        $this->user_id = $data['user_profile']['user_id'];
+        if( is_array($data) && array_key_exists('user_profile', $data) ) {
+            $this->user_id = $data['user_profile']['user_id'];
+        }
+        $this->headers['Authorization'] = 'Token ' . $this->auth_token;
+        $this->headers['CH-DeviceID'] = mt_rand(10000, mt_getrandmax());
+        $this->headers['CH-UserID'] = $this->user_id;
     }
 
     public function setPhoneNumber($phone_number) {
@@ -44,8 +42,10 @@ class Sessions
     }
 
     public function loginWithAuthToken($auth_token) {
-        $this->logged_in();
-        $this->auth_token = $auth_token;
+        $this->logged_in([
+            'auth_token' => $auth_token
+        ]);
+        $this->logged_in($this->me());
     }
 
 }

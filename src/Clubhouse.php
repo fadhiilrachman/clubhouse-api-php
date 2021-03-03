@@ -3,7 +3,7 @@
 /**
 * Clubhouse Private API
 * @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman>
-* @version 1.1.0
+* @version 1.2.0
 * @license https://github.com/fadhiilrachman/clubhouse-api-php/blob/master/LICENSE The BSD-3-Clause License
 */
 
@@ -29,7 +29,7 @@ class Clubhouse extends Requests
         ];
         $request = $this->post('/start_phone_number_auth', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException($request['error_message'], 500);
+            if($request['error_message']!==null) throw new ClubhouseException($request['error_message'], 500);
         }
         return $request;
     }
@@ -40,7 +40,7 @@ class Clubhouse extends Requests
         ];
         $request = $this->post('/resend_phone_number_auth', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException($request['error_message'], 500);
+            if($request['error_message']!==null) throw new ClubhouseException($request['error_message'], 500);
         }
         return $request;
     }
@@ -51,7 +51,7 @@ class Clubhouse extends Requests
         ];
         $request = $this->post('/call_phone_number_auth', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException($request['error_message'], 500);
+            if($request['error_message']!==null) throw new ClubhouseException($request['error_message'], 500);
         }
         return $request;
     }
@@ -63,7 +63,7 @@ class Clubhouse extends Requests
         ];
         $request = $this->post('/complete_phone_number_auth', $post);
         if( is_array($request) && array_key_exists('auth_token', $request) ) {
-            $this->save($request);
+            $this->logged_in($request);
         } else {
             throw new ClubhouseException('login failed', 500);
         }
@@ -203,6 +203,15 @@ class Clubhouse extends Requests
             'email' => $email
         ];
         $request = $this->post('/add_email', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('add email failed', 500);
+        }
+        return $request;
+    }
+
+    public function updatePhoto($file_path) {
+        $this->required_login();;
+        $request = $this->upload('/update_photo', $file_path);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('add email failed', 500);
         }
