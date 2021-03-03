@@ -3,7 +3,7 @@
 /**
 * Clubhouse Private API
 * @author Fadhiil Rachman <https://www.instagram.com/fadhiilrachman/>
-* @version 1.2.2
+* @version 1.2.3
 * @license https://github.com/fadhiilrachman/clubhouse-api-php/blob/master/LICENSE The BSD-3-Clause License
 */
 
@@ -171,18 +171,6 @@ class Clubhouse extends Requests
         return $request;
     }
 
-    public function inviteFromWhitelist($user_id) {
-        $this->required_login();
-        $post=[
-            'user_id' => $user_id,
-        ];
-        $request = $this->post('/invite_from_waitlist', $post);
-        if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException('invite from waitlist failed', 500);
-        }
-        return $request;
-    }
-
     public function me($return_blocked_ids=null, $timezone_identifier='Asia/Jakarta', $return_following_ids=null) {
         $this->required_login();
         $post=[
@@ -209,6 +197,42 @@ class Clubhouse extends Requests
         return $request;
     }
 
+    public function updateUsername($username) {
+        $this->required_login();
+        $post=[
+            'username' => $username
+        ];
+        $request = $this->post('/update_username', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('update username failed', 500);
+        }
+        return $request;
+    }
+
+    public function updateName($name) {
+        $this->required_login();
+        $post=[
+            'name' => $name
+        ];
+        $request = $this->post('/update_name', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('update name failed', 500);
+        }
+        return $request;
+    }
+
+    public function updateBio($bio) {
+        $this->required_login();
+        $post=[
+            'bio' => $bio
+        ];
+        $request = $this->post('/update_bio', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('update bio failed', 500);
+        }
+        return $request;
+    }
+
     public function updatePhoto($file_path) {
         $this->required_login();;
         $request = $this->upload('/update_photo', $file_path);
@@ -218,11 +242,62 @@ class Clubhouse extends Requests
         return $request;
     }
 
+    public function addUserTopic($club_id=null, $topic_id=null) {
+        $this->required_login();
+        $post=[
+            'club_id' => $club_id,
+            'topic_id' => $topic_id
+        ];
+        $request = $this->post('/add_user_topic', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('add user topic failed', 500);
+        }
+        return $request;
+    }
+
+    public function removeUserTopic($club_id=null, $topic_id=null) {
+        $this->required_login();
+        $post=[
+            'club_id' => $club_id,
+            'topic_id' => $topic_id
+        ];
+        $request = $this->post('/remove_user_topic', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('remove user topic failed', 500);
+        }
+        return $request;
+    }
+
     public function checkWaitlistStatus() {
         $this->required_login();
         $request = $this->post('/check_waitlist_status');
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('check waitlist status failed', 500);
+        }
+        return $request;
+    }
+
+    public function inviteFromWhitelist($user_id) {
+        $this->required_login();
+        $post=[
+            'user_id' => $user_id,
+        ];
+        $request = $this->post('/invite_from_waitlist', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('invite from waitlist failed', 500);
+        }
+        return $request;
+    }
+
+    public function inviteToApp($phone_number, $name='Clubhouse User') {
+        $this->required_login();
+        $post=[
+            'name' => $name,
+            'phone_number' => $phone_number
+        ];
+        $request = $this->post('/invite_to_app', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('invite to app failed', 500);
         }
         return $request;
     }
@@ -250,6 +325,15 @@ class Clubhouse extends Requests
         $request = $this->get('/get_actionable_notifications');
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('get actionable notifications failed', 500);
+        }
+        return $request;
+    }
+
+    public function getCreateChannelTargets() {
+        $this->required_login();
+        $request = $this->get('/get_create_channel_targets');
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get create channel targets failed', 500);
         }
         return $request;
     }
@@ -336,6 +420,21 @@ class Clubhouse extends Requests
         return $request;
     }
 
+    public function searchClubs($query, $followers_only=false, $following_only=false, $cofollows_only=false) {
+        $this->required_login();
+        $post=[
+            'query' => $query,
+            'followers_only' => $followers_only,
+            'following_only' => $following_only,
+            'cofollows_only' => $cofollows_only
+        ];
+        $request = $this->post('/search_clubs', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('search clubs failed', 500);
+        }
+        return $request;
+    }
+
     public function getEvents($is_filtered=true, $page_size=25, $page=1) {
         $this->required_login();
         $param=[
@@ -381,9 +480,9 @@ class Clubhouse extends Requests
             'time_start_epoch' => $time_start_epoch,
             'name' => $name
         ];
-        $request = $this->post('/edit_event', $post);
+        $request = $this->post('/create_event', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
-            throw new ClubhouseException('edit event failed', 500);
+            throw new ClubhouseException('create event failed', 500);
         }
         return $request;
     }
@@ -435,6 +534,46 @@ class Clubhouse extends Requests
         return $request;
     }
 
+    public function getTopic($topic_id) {
+        $this->required_login();
+        $post=[
+            'topic_id' => $topic_id
+        ];
+        $request = $this->post('/get_topic', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get topic failed', 500);
+        }
+        return $request;
+    }
+
+    public function getUsersForTopic($topic_id, $page_size=25, $page=1) {
+        $this->required_login();
+        $param=[
+            'topic_id' => $topic_id,
+            'page_size' => $page_size,
+            'page' => $page
+        ];
+        $request = $this->get('/get_users_for_topic', $param);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get users for topic failed', 500);
+        }
+        return $request;
+    }
+
+    public function getClubsForTopic($topic_id, $page_size=25, $page=1) {
+        $this->required_login();
+        $param=[
+            'topic_id' => $topic_id,
+            'page_size' => $page_size,
+            'page' => $page
+        ];
+        $request = $this->get('/get_clubs_for_topic', $param);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('get clubs for topic failed', 500);
+        }
+        return $request;
+    }
+
     public function getClub($club_id) {
         $this->required_login();
         $post=[
@@ -460,6 +599,71 @@ class Clubhouse extends Requests
         $request = $this->get('/get_club_members', $param);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('get club members failed', 500);
+        }
+        return $request;
+    }
+
+    public function acceptClubMemberInvite($club_id) {
+        $this->required_login();
+        $post=[
+            'club_id' => $club_id,
+            'source_topic_id' => null
+        ];
+        $request = $this->post('/accept_club_member_invite', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('accept club member invite failed', 500);
+        }
+        return $request;
+    }
+
+    public function addClubAdmin($club_id, $user_id) {
+        $this->required_login();
+        $post=[
+            'club_id' => $club_id,
+            'user_id' => $user_id
+        ];
+        $request = $this->post('/add_club_admin', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('add club admin failed', 500);
+        }
+        return $request;
+    }
+
+    public function removeClubAdmin($club_id, $user_id) {
+        $this->required_login();
+        $post=[
+            'club_id' => $club_id,
+            'user_id' => $user_id
+        ];
+        $request = $this->post('/remove_club_admin', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('remove club admin failed', 500);
+        }
+        return $request;
+    }
+
+    public function addClubMember($club_id, $user_id) {
+        $this->required_login();
+        $post=[
+            'club_id' => $club_id,
+            'user_id' => $user_id
+        ];
+        $request = $this->post('/add_club_member', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('add club member failed', 500);
+        }
+        return $request;
+    }
+
+    public function removeClubMember($club_id, $user_id) {
+        $this->required_login();
+        $post=[
+            'club_id' => $club_id,
+            'user_id' => $user_id
+        ];
+        $request = $this->post('/remove_club_member', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('remove club member failed', 500);
         }
         return $request;
     }
@@ -565,6 +769,55 @@ class Clubhouse extends Requests
         $request = $this->post('/active_ping', $post);
         if( is_array($request) && array_key_exists('error_message', $request) ) {
             throw new ClubhouseException('active ping failed', 500);
+        }
+        return $request;
+    }
+
+    public function inviteToNewChannel($user_id, $channel) {
+        $this->required_login();
+        $post=[
+            'user_id' => $user_id,
+            'channel' => $channel
+        ];
+        $request = $this->post('/invite_to_new_channel', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('invite to new channel failed', 500);
+        }
+        return $request;
+    }
+
+    public function acceptNewChannelInvite($channel_invite_id) {
+        $this->required_login();
+        $post=[
+            'channel_invite_id' => $channel_invite_id
+        ];
+        $request = $this->post('/accept_new_channel_invite', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('accept new channel invite failed', 500);
+        }
+        return $request;
+    }
+
+    public function rejectNewChannelInvite($channel_invite_id) {
+        $this->required_login();
+        $post=[
+            'channel_invite_id' => $channel_invite_id
+        ];
+        $request = $this->post('/reject_new_channel_invite', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('reject new channel invite failed', 500);
+        }
+        return $request;
+    }
+
+    public function cancelNewChannelInvite($channel_invite_id) {
+        $this->required_login();
+        $post=[
+            'channel_invite_id' => $channel_invite_id
+        ];
+        $request = $this->post('/cancel_new_channel_invite', $post);
+        if( is_array($request) && array_key_exists('error_message', $request) ) {
+            throw new ClubhouseException('cancel new channel invite failed', 500);
         }
         return $request;
     }
